@@ -1,7 +1,7 @@
 // pages/_app.tsx
 import '../styles/globals.css';
 import { AppProps } from 'next/app';
-import Layout from '../components/layout';
+import Layout from '../components/Layout';
 import { RSSEProvider } from '../components/RSSEContext';
 
 function MyApp({ Component, pageProps }: AppProps) {
