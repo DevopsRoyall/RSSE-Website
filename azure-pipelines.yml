@@ -8,44 +8,59 @@ trigger:
     include:
     - main
 
-pool: 
+jobs:
+- job: Strapi
+  displayName: 'Strapi Build'
+  pool: 
    name: Default
 
-steps:
-- task: NodeTool@0
-  inputs:
-    versionSpec: '14.x'
-  displayName: 'Install Node.js'
+  steps:
+  - task: NodeTool@0
+    inputs:
+      versionSpec: '14.x'
+    displayName: 'Install Node.js'
 
-- script: |
-    npm ci
-  displayName: 'Install dependencies (Strapi)'
-  workingDirectory: './rsse-strapi'
+  - script: |
+      npm ci
+    displayName: 'Install dependencies (Strapi)'
+    workingDirectory: './rsse-strapi'
 
-- script: |
-    npm ci
-  displayName: 'Install dependencies (Next.js)'
-  workingDirectory: './rsse-frontend'
+  - script: |
+      npm run build
+    displayName: 'Build Strapi'
+    workingDirectory: './rsse-strapi'
 
-- script: |
-    npm run build
-  displayName: 'Build Strapi'
-  workingDirectory: './rsse-strapi'
+  - task: PublishBuildArtifacts@1
+    inputs:
+      pathtoPublish: 'rsse-strapi/build'
+      artifactName: 'StrapiBuild'
+    displayName: 'Publish Strapi build artifacts'
 
-- script: |
-    npm run build
-  displayName: 'Build Next.js'
-  workingDirectory: './rsse-frontend'
+- job: Frontend
+  displayName: 'Frontend Build'
+  pool: 
+   name: Default
 
-- task: PublishBuildArtifacts@1
-  inputs:
-    pathtoPublish: 'rsse-strapi/build'
-    artifactName: 'StrapiBuild'
-  displayName: 'Publish Strapi build artifacts'
+  steps:
+  - task: NodeTool@0
+    inputs:
+      versionSpec: '14.x'
+    displayName: 'Install Node.js'
 
-- task: PublishBuildArtifacts@1
-  inputs:
-    pathtoPublish: 'rsse-frontend/.next'
-    artifactName: 'NextBuild'
-  displayName: 'Publish Next.js build artifacts'
+  - script: |
+      npm ci
+    displayName: 'Install dependencies (Next.js)'
+    workingDirectory: './rsse-frontend'
+
+  - script: |
+      npm run build
+    displayName: 'Build Next.js'
+    workingDirectory: './rsse-frontend'
+
+  - task: PublishBuildArtifacts@1
+    inputs:
+      pathtoPublish: 'rsse-frontend/.next'
+      artifactName: 'NextBuild'
+    displayName: 'Publish Next.js build artifacts'
+
 
