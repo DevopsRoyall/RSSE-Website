@@ -1,8 +1,3 @@
-# Starter pipeline
-# Start with a minimal pipeline that you can customize to build and deploy your code.
-# Add steps that build, run tests, deploy, and more:
-# https://aka.ms/yaml
-
 trigger:
   branches:
     include:
@@ -21,7 +16,7 @@ jobs:
     displayName: 'Install Node.js'
 
   - script: |
-      npm ci
+      npm install
     displayName: 'Install dependencies (Strapi)'
     workingDirectory: './rsse-strapi'
 
@@ -48,7 +43,7 @@ jobs:
     displayName: 'Install Node.js'
 
   - script: |
-      npm ci
+      npm install
     displayName: 'Install dependencies (Next.js)'
     workingDirectory: './rsse-frontend'
 
@@ -62,5 +57,3 @@ jobs:
       pathtoPublish: 'rsse-frontend/.next'
       artifactName: 'NextBuild'
     displayName: 'Publish Next.js build artifacts'
-
-
