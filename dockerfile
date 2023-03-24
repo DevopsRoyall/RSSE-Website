@@ -26,6 +26,8 @@ RUN apk add --no-cache --virtual .build-deps ca-certificates
 # Copy frontend build
 COPY --from=frontend-builder /app/.next /app/rsse-frontend/.next
 COPY --from=frontend-builder /app/node_modules /app/rsse-frontend/node_modules
+COPY --from=frontend-builder /app/public /app/rsse-frontend/public
+COPY --from=frontend-builder /app/styles /app/rsse-frontend/styles
 
 # Copy backend build
 COPY --from=backend-builder /app/build /app/rsse-strapi/build
